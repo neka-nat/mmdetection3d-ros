@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  mmdetection3d-ros:
+    image: mmdetection3d:latest
+    build:
+      context: ./mmdetection3d
+      dockerfile: ./docker/Dockerfile
+    container_name: mmdetection3d-ros
+    environment:
+      - "DISPLAY=${DISPLAY}"
+      - "NVIDIA_VISIBLE_DEVICES=all"
+      - "NVIDIA_DRIVER_CAPABILITIES=all"
+    volumes:
+      - ./data:/mmdetection3d/data
+      - ./models:/mmdetection3d/models
+      - /dev:/dev
+      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+    tty: true
+    privileged: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - capabilities: [gpu]
